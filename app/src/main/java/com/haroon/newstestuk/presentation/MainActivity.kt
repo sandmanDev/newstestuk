@@ -10,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.haroon.newstestuk.presentation.common.MainDestinations
+import com.haroon.newstestuk.presentation.screens.coindetails.CoinDetailsScreen
 import com.haroon.newstestuk.presentation.screens.coinlist.CoinListScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,20 +27,20 @@ class MainActivity : ComponentActivity() {
             MaterialTheme(colors = darkColors()) {
                 NavHost(
                     navController,
-                    startDestination,
+                    MainDestinations.COIN_LIST_ROUTE,
                     Modifier.fillMaxSize(),
                 ) {
 
-                    composable("coinListFragment") {
+                    composable(MainDestinations.COIN_LIST_ROUTE) {
                         CoinListScreen(navController = navController)
+                    }
+                    composable(MainDestinations.COIN_DETAILS_ROUTE) { backStackEntry ->
+                        val coinId = backStackEntry.arguments?.getString(MainDestinations.CoinDetailsArgs.COIN_ID) ?: ""
+                        CoinDetailsScreen(navController = navController, coinID = coinId)
                     }
                 }
             }
 
         }
-    }
-
-    companion object {
-        const val startDestination : String = "CoinListFragment"
     }
 }

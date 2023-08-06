@@ -37,7 +37,7 @@ fun CoinListScreen(navController: NavController) {
                         CoinList(
                             coins = it,
                             onCoinClick = {
-                                //todo open coin detail screen
+                                navController.navigate("coinDetailsFragment/${it.id}")
                             },
                             onRefresh = { viewModel.refreshCoins() },
                             onTypeChange = {
