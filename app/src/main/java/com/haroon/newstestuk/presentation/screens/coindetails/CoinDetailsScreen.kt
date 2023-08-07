@@ -10,17 +10,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.haroon.newstestuk.presentation.common.NoInternetSnackbar
 import com.haroon.newstestuk.presentation.screens.coindetails.components.CoinDetailsView
 
 
 @Composable
-fun CoinDetailsScreen(navController: NavController, coinID: String?) {
+fun CoinDetailsScreen(navController: NavController, coinID: String) {
     val viewModel = hiltViewModel<CoinDetailsViewModel>()
     val state by viewModel.command.collectAsState()
 
-    if (coinID != null) {
-        viewModel.getCoinById(coinID)
-    }
+
+    viewModel.getCoinById(coinID)
+
     when (state) {
         is CoinDetailsViewModel.Command.DataLoaded -> {
             (state as CoinDetailsViewModel.Command.DataLoaded)?.coinDetails?.let {
@@ -35,7 +36,11 @@ fun CoinDetailsScreen(navController: NavController, coinID: String?) {
                 CircularProgressIndicator()
             }
         }
-        null -> TODO()
+        CoinDetailsViewModel.Command.DataLoadingFailed -> {
+            NoInternetSnackbar(onClick = {
+                viewModel.getCoinById(coinID)
+            })
+        }
     }
 
 

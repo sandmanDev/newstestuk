@@ -3,6 +3,7 @@ package com.haroon.newstestuk.data.repository
 import com.haroon.newstestuk.data.api.CoinApiService
 import com.haroon.newstestuk.data.model.Coin
 import com.haroon.newstestuk.data.model.CoinDetails
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 

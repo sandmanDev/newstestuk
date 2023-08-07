@@ -1,7 +1,6 @@
 package com.haroon.newstestuk.presentation.screens.coinlist
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.ui.text.toLowerCase
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 
@@ -21,6 +21,7 @@ class CoinListViewModel @Inject constructor(private val repository: CoinReposito
 
     sealed class Command{
         object DataLoading : Command()
+        object DataLoadingFailed : Command()
         data class DataLoaded(var coins : List<Coin>?) : Command()
     }
 
@@ -48,11 +49,18 @@ class CoinListViewModel @Inject constructor(private val repository: CoinReposito
 
     @VisibleForTesting
     private fun getCoins() = viewModelScope.launch {
-        _coins.value = repository.getCoins()
+        try {
+            _coins.value = repository.getCoins()
+        } catch (exception: RuntimeException)  {
+            _command.value = Command.DataLoadingFailed
+        }
         _coins.value?.let {
             _coins.value = it.sortedBy { item -> item.name }
             _command.value = Command.DataLoaded(_coins.value)
+        } ?: run {
+            _command.value = Command.DataLoadingFailed
         }
+
 
     }
 

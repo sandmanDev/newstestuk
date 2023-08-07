@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -16,10 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.haroon.newstestuk.presentation.common.CustomAppBar
+import com.haroon.newstestuk.presentation.common.NoInternetSnackbar
 import com.haroon.newstestuk.presentation.screens.coinlist.components.CoinList
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinListScreen(navController: NavController) {
     val viewModel = hiltViewModel<CoinListViewModel>()
@@ -55,7 +54,11 @@ fun CoinListScreen(navController: NavController) {
                         CircularProgressIndicator()
                     }
                 }
-                null -> TODO()
+                CoinListViewModel.Command.DataLoadingFailed -> {
+                    NoInternetSnackbar(onClick = {
+                        viewModel.refreshCoins()
+                    })
+                }
             }
 
         }

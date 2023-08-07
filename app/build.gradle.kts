@@ -85,4 +85,19 @@ dependencies {
 
     val nav_version = "2.6.0"
     implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    // JUnit 5
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+
+    // Mockito
+    testImplementation("org.mockito:mockito-core:3.7.7")
+    testImplementation("org.mockito:mockito-inline:3.11.2")
+
+    testImplementation("org.mockito:mockito-junit-jupiter:3.7.7")
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
+
+
+    // Kotlin Coroutines Test
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 }
