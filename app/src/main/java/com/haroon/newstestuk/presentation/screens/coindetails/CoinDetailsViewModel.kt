@@ -28,19 +28,17 @@ class CoinDetailsViewModel @Inject constructor(private val repository: CoinRepos
     }
 
     private val _coinDetail = MutableLiveData<CoinDetails>()
-    private val _command = SingleMutableStateFlow<Command>(Command.DataLoading)
+    private val _command = MutableStateFlow<Command>(Command.DataLoading)
     val coinDetails: LiveData<CoinDetails>
         get() = _coinDetail
 
-    val command
-        get() = _command.stateFlow.stateIn(scope = viewModelScope, started = SharingStarted.Lazily,
-            Command.DataLoading)
+    val command: StateFlow<Command> = _command
 
 
     fun getCoinById(id: String) = viewModelScope.launch {
         try {
             _coinDetail.value = repository.getCoinById(id)
-        } catch (exception: UnknownHostException)  {
+        } catch (exception: RuntimeException)  {
             _command.value = Command.DataLoadingFailed
         }
 
@@ -53,15 +51,6 @@ class CoinDetailsViewModel @Inject constructor(private val repository: CoinRepos
     }
 }
 
-
-class SingleMutableStateFlow<T>(initialValue: T) {
-    private val _stateFlow = MutableStateFlow(initialValue)
-    val stateFlow: StateFlow<T> get() = _stateFlow
-
-    var value: T
-        get() = _stateFlow.value
-        set(newValue) { _stateFlow.value = newValue }
-}
 
 
 

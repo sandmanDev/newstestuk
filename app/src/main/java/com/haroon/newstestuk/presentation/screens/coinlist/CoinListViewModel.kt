@@ -10,6 +10,7 @@ import com.haroon.newstestuk.data.repository.CoinRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.net.UnknownHostException
@@ -36,9 +37,8 @@ class CoinListViewModel @Inject constructor(private val repository: CoinReposito
     val selectedType : LiveData<String>
         get() = _selectedType
 
-    val command
-        get() = _command.stateIn(scope = viewModelScope, started = SharingStarted.Lazily,Command.DataLoading)
 
+    val command: StateFlow<Command> = _command
 
 
     init {
@@ -47,8 +47,8 @@ class CoinListViewModel @Inject constructor(private val repository: CoinReposito
         getCoins()
     }
 
-    @VisibleForTesting
-    private fun getCoins() = viewModelScope.launch {
+
+    fun getCoins() = viewModelScope.launch {
         try {
             _coins.value = repository.getCoins()
         } catch (exception: RuntimeException)  {
