@@ -51,7 +51,7 @@ class CoinListViewModel @Inject constructor(private val repository: CoinReposito
     fun getCoins() = viewModelScope.launch {
         try {
             _coins.value = repository.getCoins()
-        } catch (exception: RuntimeException)  {
+        } catch (exception: Exception)  {
             _command.value = Command.DataLoadingFailed
         }
         _coins.value?.let {

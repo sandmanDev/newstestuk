@@ -38,7 +38,7 @@ class CoinDetailsViewModel @Inject constructor(private val repository: CoinRepos
     fun getCoinById(id: String) = viewModelScope.launch {
         try {
             _coinDetail.value = repository.getCoinById(id)
-        } catch (exception: RuntimeException)  {
+        } catch (exception: Exception)  {
             _command.value = Command.DataLoadingFailed
         }
 
